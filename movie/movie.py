@@ -1,7 +1,5 @@
-from flask import Flask, render_template, request, jsonify, make_response
 import json
-import sys
-from werkzeug.exceptions import NotFound
+from flask import Flask, render_template, request, jsonify, make_response
 
 app = Flask(__name__)
 
@@ -136,6 +134,5 @@ def del_movie(movieid):
 
 
 if __name__ == "__main__":
-    # p = sys.argv[1]
     print("Server running in port %s" % PORT)
     app.run(host=HOST, port=PORT)
