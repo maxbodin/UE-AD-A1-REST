@@ -66,6 +66,18 @@ def get_movies_bydirector():
     return jsonify({"error": "Director name not provided"}), 400
 
 
+@app.route("/moviesbygenre", methods=['GET'])
+def get_movies_bygenre():
+    genre = request.args.get('genre', None)
+    if genre:
+        result = [movie for movie in movies if genre in movie.get('genre', [])]
+        if result:
+            return jsonify(result), 200
+        else:
+            return jsonify({"error": "No movies found for the specified genre"}), 404
+    return jsonify({"error": "Genre not provided"}), 400
+
+
 @app.route("/addmovie/<movieid>", methods=['POST'])
 def add_movie(movieid):
     req = request.get_json()
