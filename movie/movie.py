@@ -70,7 +70,21 @@ def add_movie(movieid):
 
 def write(all_movies):
     with open('{}/databases/movies.json'.format("."), 'w') as f:
-        json.dump(all_movies, f)
+        movies_dict = {'movies': all_movies}
+        json.dump(movies_dict, f)
+
+
+@app.route("/movies/<movieid>/<rate>", methods=['PUT'])
+def update_movie_rating(movieid, rate):
+    for movie in movies:
+        if str(movie["id"]) == str(movieid):
+            movie["rating"] = rate
+            write(movies)
+            res = make_response(jsonify(movie), 200)
+            return res
+
+    res = make_response(jsonify({"error": "movie ID not found"}), 201)
+    return res
 
 
 if __name__ == "__main__":
