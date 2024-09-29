@@ -66,6 +66,21 @@ paths:
                 $ref: '#/components/schemas/Schedule'
         "400":
           description: bad input parameter
+  /help:
+    get:
+      tags:
+        - developers
+      summary: Get all available endpoints
+      operationId: help
+      responses:
+        "200":
+          description: List of endpoints
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
 components:
   schemas:
     AllSchedule:
