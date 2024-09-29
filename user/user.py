@@ -1,12 +1,10 @@
-from flask import Flask, render_template, request, jsonify, make_response
-import requests
 import json
-from werkzeug.exceptions import NotFound
+
+from flask import Flask
+
+from constants import HOST, USER_PORT
 
 app = Flask(__name__)
-
-PORT = 3203
-HOST = '0.0.0.0'
 
 with open('{}/databases/users.json'.format("."), "r") as jsf:
     users = json.load(jsf)["users"]
@@ -18,5 +16,5 @@ def home():
 
 
 if __name__ == "__main__":
-    print("Server running in port %s" % PORT)
-    app.run(host=HOST, port=PORT)
+    print("Server running in port %s" % USER_PORT)
+    app.run(host=HOST, port=USER_PORT)
