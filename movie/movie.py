@@ -54,6 +54,25 @@ def get_movie_bytitle():
     return res
 
 
+@app.route("/addmovie/<movieid>", methods=['POST'])
+def add_movie(movieid):
+    req = request.get_json()
+
+    for movie in movies:
+        if str(movie["id"]) == str(movieid):
+            return make_response(jsonify({"error": "movie ID already exists"}), 409)
+
+    movies.append(req)
+    write(movies)
+    res = make_response(jsonify({"message": "movie added"}), 200)
+    return res
+
+
+def write(all_movies):
+    with open('{}/databases/movies.json'.format("."), 'w') as f:
+        json.dump(all_movies, f)
+
+
 if __name__ == "__main__":
     # p = sys.argv[1]
     print("Server running in port %s" % PORT)
