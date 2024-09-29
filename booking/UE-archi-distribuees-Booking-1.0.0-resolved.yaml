@@ -101,6 +101,21 @@ paths:
                 $ref: '#/components/schemas/BookingsUser'
         "409":
           description: an existing item already exists
+  /help:
+    get:
+      tags:
+        - developers
+      summary: Get all available endpoints
+      operationId: help
+      responses:
+        "200":
+          description: List of endpoints
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
 components:
   schemas:
     AllBookings:
