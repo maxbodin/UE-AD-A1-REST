@@ -54,6 +54,18 @@ def get_movie_bytitle():
     return res
 
 
+@app.route("/moviesbydirector", methods=['GET'])
+def get_movies_bydirector():
+    director_name = request.args.get('director', None)
+    if director_name:
+        result = [movie for movie in movies if movie.get('director') == director_name]
+        if result:
+            return jsonify(result), 200
+        else:
+            return jsonify({"error": "No movies found for the specified director"}), 404
+    return jsonify({"error": "Director name not provided"}), 400
+
+
 @app.route("/addmovie/<movieid>", methods=['POST'])
 def add_movie(movieid):
     req = request.get_json()
