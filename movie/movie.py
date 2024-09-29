@@ -9,14 +9,21 @@ PORT = 3200
 HOST = '0.0.0.0'
 
 with open('{}/databases/movies.json'.format("."), 'r') as jsf:
-   movies = json.load(jsf)["movies"]
+    movies = json.load(jsf)["movies"]
+
 
 # root message
 @app.route("/", methods=['GET'])
 def home():
-    return make_response("<h1 style='color:blue'>Welcome to the Movie service!</h1>",200)
+    return make_response("<h1 style='color:blue'>Welcome to the Movie service!</h1>", 200)
+
+
+@app.route("/template", methods=['GET'])
+def template():
+    return make_response(render_template('index.html', body_text='This is my HTML template for Movie service'), 200)
+
 
 if __name__ == "__main__":
-    #p = sys.argv[1]
-    print("Server running in port %s"%(PORT))
+    # p = sys.argv[1]
+    print("Server running in port %s" % PORT)
     app.run(host=HOST, port=PORT)
