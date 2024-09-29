@@ -17,6 +17,11 @@ def home():
     return "<h1 style='color:blue'>Welcome to the Booking service!</h1>"
 
 
+@app.route("/bookings", methods=['GET'])
+def get_all_bookings():
+    return jsonify(bookings), 200
+
+
 if __name__ == "__main__":
     print("Server running in port %s" % PORT)
     app.run(host=HOST, port=PORT)
