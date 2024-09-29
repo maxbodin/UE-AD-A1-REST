@@ -2,10 +2,10 @@ import json
 
 from flask import Flask, render_template, request, jsonify, make_response
 
+from constants import MOVIE_PORT, HOST
+
 app = Flask(__name__)
 
-PORT = 3200
-HOST = '0.0.0.0'
 
 with open('{}/databases/movies.json'.format("."), 'r') as jsf:
     movies = json.load(jsf)["movies"]
@@ -147,5 +147,5 @@ def del_movie(movieid):
 
 
 if __name__ == "__main__":
-    print("Server running in port %s" % PORT)
-    app.run(host=HOST, port=PORT)
+    print("Server running in port %s" % MOVIE_PORT)
+    app.run(host=HOST, port=MOVIE_PORT)
