@@ -2,8 +2,7 @@
 openapi: 3.0.3
 info:
   title: Movie API
-  summary: This is the API of the Movie service
-  description: This is the API of the Movie service, it should be much much much much much much much much much much much much much much much much much much much much much longer
+  description: Movie service API for managing movies and querying various movie information.
   contact:
     name: Helene Coullon
     url: https://helene-coullon.fr/
@@ -11,7 +10,7 @@ info:
   license:
     name: GPL v3
     url: https://www.gnu.org/licenses/gpl-3.0.en.html
-  version: 1.0.0
+  version: 1.0.1
 tags:
 - name: admins
   description: Secured Admin-only calls
@@ -22,13 +21,11 @@ paths:
     get:
       tags:
       - developers
-      summary: home page of the service
-      description: |
-        Nothing to do
+      summary: Home page of the service
       operationId: home
       responses:
         "200":
-          description: welcome message
+          description: Welcome message
           content:
             text/html:
               schema:
@@ -38,9 +35,7 @@ paths:
     get:
       tags:
       - developers
-      summary: get the full JSON database
-      description: |
-        Nothing to do
+      summary: Get the full JSON database
       operationId: get_json
       responses:
         "200":
@@ -53,8 +48,7 @@ paths:
     get:
       tags:
       - developers
-      summary: get the movie by its id
-      description: By passing in the appropriate options, you can get info of a Movie
+      summary: Get the movie by its ID
       operationId: get_movie_byid
       parameters:
       - name: movieid
@@ -74,19 +68,19 @@ paths:
           description: bad input parameter
     post:
       tags:
-      - admins
-      summary: add a movie item
+        - admins
+      summary: Add a movie item
       description: Adds a movie to the system
       operationId: create_movie
       parameters:
-      - name: movieid
-        in: path
-        description: Movie ID.
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
+        - name: movieid
+          in: path
+          description: Movie ID.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
       requestBody:
         description: Inventory item to add
         content:
@@ -105,8 +99,7 @@ paths:
     delete:
       tags:
       - admins
-      summary: delete a movie item
-      description: Adds a movie to the system
+      summary: Delete a movie item
       operationId: del_movie
       parameters:
       - name: movieid
@@ -126,9 +119,7 @@ paths:
     get:
       tags:
       - developers
-      summary: get the movie by its title
-      description: |
-        By passing in the appropriate options, you can get Movie info
+      summary: Get the movie by its title
       operationId: get_movie_bytitle
       parameters:
       - name: title
@@ -148,37 +139,98 @@ paths:
                 $ref: '#/components/schemas/MovieItem'
         "400":
           description: bad input parameter
+  /moviesbydirector:
+    get:
+      tags:
+      - developers
+      summary: Get movies by director
+      operationId: get_movies_bydirector
+      parameters:
+      - name: director
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Movies list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllMovies'
+        "400":
+          description: bad input parameter
+        "404":
+          description: no movies found for director
+  /moviesbygenre:
+    get:
+      tags:
+      - developers
+      summary: Get movies by genre
+      operationId: get_movies_bygenre
+      parameters:
+      - name: genre
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Movies list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllMovies'
+        "400":
+          description: bad input parameter
+        "404":
+          description: no movies found for genre
   /movies/{movieid}/{rate}:
     put:
       tags:
-      - admins
-      summary: update a movie rate
+        - admins
+      summary: Update a movie rate
       description: update the rating of a movie
       operationId: update_movie_rating
       parameters:
-      - name: movieid
-        in: path
-        description: Movie ID.
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      - name: rate
-        in: path
-        description: Movie rating.
-        required: true
-        style: simple
-        explode: false
-        schema:
-          maximum: 10
-          minimum: 0
-          type: integer
+        - name: movieid
+          in: path
+          description: Movie ID.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+        - name: rate
+          in: path
+          description: Movie rating.
+          required: true
+          style: simple
+          explode: false
+          schema:
+            maximum: 10
+            minimum: 0
+            type: integer
       responses:
         "200":
           description: rate updated
         "400":
           description: movie ID not found
+  /help:
+    get:
+      tags:
+      - developers
+      summary: Get all available endpoints
+      operationId: help
+      responses:
+        "200":
+          description: List of endpoints
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
 components:
   schemas:
     AllMovies:
@@ -189,7 +241,6 @@ components:
         movies:
           type: array
           items:
-            type: object
             $ref: '#/components/schemas/MovieItem'
     MovieItem:
       type: object
@@ -211,5 +262,8 @@ components:
         id:
           type: string
           example: 39ab85e5-5e8e-4dc5-afea-65dc368bd7ab
-
-
+        genre:
+          type: array
+          items:
+            type: string
+            example: Comedy
