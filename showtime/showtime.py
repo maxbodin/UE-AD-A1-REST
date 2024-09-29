@@ -2,10 +2,9 @@ import json
 
 from flask import Flask, jsonify
 
-app = Flask(__name__)
+from constants import HOST, SHOWTIME_PORT
 
-PORT = 3202
-HOST = '0.0.0.0'
+app = Flask(__name__)
 
 with open('{}/databases/times.json'.format("."), "r") as jsf:
     schedule = json.load(jsf)["schedule"]
@@ -42,5 +41,5 @@ def showtime_help():
 
 
 if __name__ == "__main__":
-    print("Server running in port %s" % PORT)
-    app.run(host=HOST, port=PORT)
+    print("Server running in port %s" % SHOWTIME_PORT)
+    app.run(host=HOST, port=SHOWTIME_PORT)
