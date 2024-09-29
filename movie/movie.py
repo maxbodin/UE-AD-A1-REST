@@ -38,6 +38,22 @@ def get_movie_byid(movieid):
     return make_response(jsonify({"error": "Movie ID not found"}), 400)
 
 
+@app.route("/moviesbytitle", methods=['GET'])
+def get_movie_bytitle():
+    movie_json = ""
+    if request.args:
+        req = request.args
+        for movie in movies:
+            if str(movie["title"]) == str(req["title"]):
+                movie_json = movie
+
+    if not movie_json:
+        res = make_response(jsonify({"error": "movie title not found"}), 400)
+    else:
+        res = make_response(jsonify(movie_json), 200)
+    return res
+
+
 if __name__ == "__main__":
     # p = sys.argv[1]
     print("Server running in port %s" % PORT)
