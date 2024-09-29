@@ -4,6 +4,7 @@ info:
   title: Booking API
   description: This is the API of the Booking service
   contact:
+    name: Helene Coullon
     email: helene.coullon@imt-atlantique.fr
   license:
     name: GPL v3
