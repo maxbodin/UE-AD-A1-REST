@@ -23,6 +23,11 @@ def template():
     return make_response(render_template('index.html', body_text='This is my HTML template for Movie service'), 200)
 
 
+@app.route("/json", methods=['GET'])
+def get_json():
+    res = make_response(jsonify(movies), 200)
+    return res
+
 if __name__ == "__main__":
     # p = sys.argv[1]
     print("Server running in port %s" % PORT)
