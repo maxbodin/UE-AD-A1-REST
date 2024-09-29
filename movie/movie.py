@@ -36,11 +36,23 @@ def get_movie_byid(movieid):
     return make_response(jsonify({"error": "Movie ID not found"}), 400)
 
 
-@app.route("/moviesbytitle", methods=['GET'])
-def get_movie_bytitle():
+@app.route("/moviesbytitle/exact", methods=['GET'])
+def get_movie_bytitle_exact():
     title = request.args.get('title', None)
     if title:
         result = [movie for movie in movies if movie.get('title') == title]
+        if result:
+            return jsonify(result), 200
+        else:
+            return jsonify({"error": "No movies found for the specified title"}), 404
+    return jsonify({"error": "Title not provided"}), 400
+
+
+@app.route("/moviesbytitle/contains", methods=['GET'])
+def get_movie_bytitle_contains():
+    title = request.args.get('title', None)
+    if title:
+        result = [movie for movie in movies if title.lower() in movie.get('title', '').lower()]
         if result:
             return jsonify(result), 200
         else:
