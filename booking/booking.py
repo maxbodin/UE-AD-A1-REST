@@ -22,6 +22,16 @@ def get_all_bookings():
     return jsonify(bookings), 200
 
 
+@app.route("/bookings/<userid>", methods=['GET'])
+def get_booking_for_user(userid):
+    user_bookings = [booking for booking in bookings if booking['userid'] == userid]
+
+    if user_bookings:
+        return jsonify(user_bookings), 200
+    else:
+        return jsonify({"error": "No bookings found for the specified user"}), 404
+
+
 if __name__ == "__main__":
     print("Server running in port %s" % PORT)
     app.run(host=HOST, port=PORT)
