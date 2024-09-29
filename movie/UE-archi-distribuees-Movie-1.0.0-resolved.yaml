@@ -115,30 +115,94 @@ paths:
           description: item deleted
         "400":
           description: ID not found
-  /moviesbytitle:
+  /moviesbytitle/exact:
     get:
       tags:
-      - developers
-      summary: Get the movie by its title
-      operationId: get_movie_bytitle
+        - developers
+      summary: Get movies by exact title match
+      operationId: get_movie_bytitle_exact
       parameters:
-      - name: title
-        in: query
-        description: pass a title
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: string
+        - name: title
+          in: query
+          description: The exact title of the movie to search for
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: string
       responses:
         "200":
-          description: Movie item
+          description: Movie items that match the exact title
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MovieItem'
+                type: array
+                items:
+                  $ref: '#/components/schemas/MovieItem'
         "400":
-          description: bad input parameter
+          description: Title not provided
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Title not provided"
+        "404":
+          description: No movies found for the specified title
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "No movies found for the specified title"
+  /moviesbytitle/contains:
+    get:
+      tags:
+        - developers
+      summary: Get movies that contain the given text in the title
+      operationId: get_movie_bytitle_contains
+      parameters:
+        - name: title
+          in: query
+          description: The text to search for in the movie titles
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Movie items that contain the provided text in the title
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MovieItem'
+        "400":
+          description: Title not provided
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Title not provided"
+        "404":
+          description: No movies found containing the specified text
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "No movies found containing the specified text"
   /moviesbydirector:
     get:
       tags:
@@ -245,11 +309,14 @@ components:
     MovieItem:
       type: object
       required:
+        - id
         - title
         - rating
         - director
-        - id
       properties:
+        id:
+          type: string
+          example: 39ab85e5-5e8e-4dc5-afea-65dc368bd7ab
         title:
           type: string
           example: The Martian
@@ -259,11 +326,9 @@ components:
         director:
           type: string
           example: Paul McGuigan
-        id:
-          type: string
-          example: 39ab85e5-5e8e-4dc5-afea-65dc368bd7ab
         genre:
           type: array
           items:
             type: string
             example: Comedy
+          example: ["Sci-Fi", "Action"]
