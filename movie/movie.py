@@ -87,6 +87,18 @@ def update_movie_rating(movieid, rate):
     return res
 
 
+@app.route("/movies/<movieid>", methods=['DELETE'])
+def del_movie(movieid):
+    for movie in movies:
+        if str(movie["id"]) == str(movieid):
+            movies.remove(movie)
+            write(movies)
+            return make_response(jsonify(movie), 200)
+
+    res = make_response(jsonify({"error": "movie ID not found"}), 400)
+    return res
+
+
 if __name__ == "__main__":
     # p = sys.argv[1]
     print("Server running in port %s" % PORT)
