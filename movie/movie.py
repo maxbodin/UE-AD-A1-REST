@@ -78,6 +78,22 @@ def get_movies_bygenre():
     return jsonify({"error": "Genre not provided"}), 400
 
 
+@app.route("/help", methods=['GET'])
+def movie_help():
+    endpoints = {
+        "GET /": "Home page of the Movie service",
+        "GET /json": "Get the full JSON database",
+        "GET /movies/<movieid>": "Get a movie by its ID",
+        "GET /moviesbytitle?title=<title>": "Get a movie by its title",
+        "GET /moviesbydirector?director=<director>": "Get movies by director",
+        "GET /moviesbygenre?genre=<genre>": "Get movies by genre",
+        "POST /addmovie/<movieid>": "Add a new movie (POST)",
+        "PUT /movies/<movieid>/<rate>": "Update movie rating (PUT)",
+        "DELETE /movies/<movieid>": "Delete a movie by its ID (DELETE)"
+    }
+    return jsonify(endpoints), 200
+
+
 @app.route("/addmovie/<movieid>", methods=['POST'])
 def add_movie(movieid):
     req = request.get_json()
