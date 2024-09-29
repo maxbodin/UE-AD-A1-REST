@@ -40,18 +40,14 @@ def get_movie_byid(movieid):
 
 @app.route("/moviesbytitle", methods=['GET'])
 def get_movie_bytitle():
-    movie_json = ""
-    if request.args:
-        req = request.args
-        for movie in movies:
-            if str(movie["title"]) == str(req["title"]):
-                movie_json = movie
-
-    if not movie_json:
-        res = make_response(jsonify({"error": "movie title not found"}), 400)
-    else:
-        res = make_response(jsonify(movie_json), 200)
-    return res
+    title = request.args.get('title', None)
+    if title:
+        result = [movie for movie in movies if movie.get('title') == title]
+        if result:
+            return jsonify(result), 200
+        else:
+            return jsonify({"error": "No movies found for the specified title"}), 404
+    return jsonify({"error": "Title not provided"}), 400
 
 
 @app.route("/moviesbydirector", methods=['GET'])
