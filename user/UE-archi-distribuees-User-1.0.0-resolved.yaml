@@ -1,0 +1,257 @@
+---
+openapi: 3.0.3
+info:
+  title: User API
+  description: This is the API of the User service
+  contact:
+    name: Helene Coullon
+    email: helene.coullon@imt-atlantique.fr
+  license:
+    name: GPL v3
+    url: https://www.gnu.org/licenses/gpl-3.0.en.html
+  version: 1.0.0
+tags:
+- name: admins
+  description: Secured Admin-only calls
+- name: developers
+  description: Operations available to regular developers
+paths:
+  /:
+    get:
+      tags:
+      - developers
+      summary: Home page of the User service
+      operationId: home
+      responses:
+        "200":
+          description: Welcome message
+          content:
+            text/html:
+              schema:
+                type: string
+                example: <h1 style='color:blue'>Welcome to the User service!</h1>
+  /users:
+    get:
+      tags:
+      - developers
+      summary: Get the all the users
+      operationId: get_users
+      responses:
+        "200":
+          description: All the users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+  /users/{id_or_name}:
+    get:
+      tags:
+        - developers
+      summary: Get user by ID or name
+      operationId: get_user
+      parameters:
+        - name: id_or_name
+          in: path
+          description: User ID or name
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: User found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "404":
+          description: User not found
+  /adduser/{userid}:
+    post:
+      tags:
+        - admins
+      summary: Add a new user
+      operationId: add_user
+      parameters:
+        - name: userid
+          in: path
+          description: User ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: User object to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        "200":
+          description: User added successfully
+        "409":
+          description: User ID already exists
+  /userssetlastactive/{userid}:
+    put:
+      tags:
+        - developers
+      summary: Update user's last active timestamp
+      operationId: update_user_last_active
+      parameters:
+        - name: userid
+          in: path
+          description: User ID
+          required: true
+          schema:
+            type: string
+        - name: last_active
+          in: query
+          description: New last active timestamp
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: User's last active timestamp updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "404":
+          description: User ID not found
+        "400":
+          description: last_active parameter not provided
+  /users/{userid}:
+    delete:
+      tags:
+        - admins
+      summary: Delete user by ID
+      operationId: delete_user
+      parameters:
+        - name: userid
+          in: path
+          description: User ID
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: User deleted successfully
+        "404":
+          description: User ID not found
+  /users/{userid}/bookings:
+    get:
+      tags:
+        - developers
+      summary: Get bookings for a specific user by ID
+      operationId: get_user_bookings
+      parameters:
+        - name: userid
+          in: path
+          description: User ID
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Bookings retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bookings'
+        "404":
+          description: User or bookings not found
+        "500":
+          description: Booking service is unavailable
+  /users/{userid}/movies:
+    get:
+      tags:
+        - developers
+      summary: Get movie details for user's bookings
+      operationId: get_user_movies_details
+      parameters:
+        - name: userid
+          in: path
+          description: User ID
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Movie details retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MovieDetails'
+        "404":
+          description: User, bookings, or movies not found
+        "500":
+          description: Booking or Movie service is unavailable
+  /help:
+    get:
+      tags:
+        - developers
+      summary: Get all available endpoints and descriptions
+      operationId: help
+      responses:
+        "200":
+          description: List of endpoints
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+components:
+  schemas:
+    User:
+      type: object
+      required:
+      - id
+      - name
+      - last_active
+      properties:
+        id:
+          type: string
+          example: "chris_rivers"
+        name:
+          type: string
+          example: "Peter Curley"
+        last_active:
+          type: integer
+          example: 1360031202
+    Bookings:
+      type: array
+      items:
+        $ref: '#/components/schemas/Booking'
+    Booking:
+      type: object
+      properties:
+        date:
+          type: string
+          example: "20230929"
+        movies:
+          type: array
+          items:
+            type: string
+            example: "276c79ec-a26a-40a6-b3d3-fb242a5947b6"
+    MovieDetails:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "276c79ec-a26a-40a6-b3d3-fb242a5947b6"
+        title:
+          type: string
+          example: "Inception"
+        director:
+          type: string
+          example: "Christopher Nolan"
+        rating:
+          type: integer
+          example: 7.1
