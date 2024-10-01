@@ -43,7 +43,7 @@ def add_user(userid):
 
 def write(all_users):
     with open('{}/databases/users.json'.format("."), 'w') as f:
-        movies_dict = {'movies': all_users}
+        movies_dict = {'users': all_users}
         json.dump(movies_dict, f)
 
 
@@ -123,11 +123,12 @@ def get_user_movie_details(userid):
 
         # Fetch movie details for each movie in the bookings.
         movie_details = []
-        for date_entry in bookings:
-            for movie_id in date_entry['movies']:
-                movie_response = requests.get(f'http://{HOST}:{MOVIE_PORT}/movies/{movie_id}')
-                if movie_response.status_code == 200:
-                    movie_details.append(movie_response.json())
+        for booking in bookings:
+            for date_entry in booking['dates']:
+                for movie_id in date_entry['movies']:
+                    movie_response = requests.get(f'http://{HOST}:{MOVIE_PORT}/movies/{movie_id}')
+                    if movie_response.status_code == 200:
+                        movie_details.append(movie_response.json())
 
         if not movie_details:
             return jsonify({"error": "No movies found for the user's bookings"}), 404
