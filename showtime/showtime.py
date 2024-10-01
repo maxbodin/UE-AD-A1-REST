@@ -1,7 +1,5 @@
 import json
-
 from flask import Flask, jsonify
-
 from constants import HOST, SHOWTIME_PORT
 
 app = Flask(__name__)

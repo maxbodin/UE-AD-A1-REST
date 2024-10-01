@@ -1,7 +1,5 @@
 import json
-
 from flask import Flask, render_template, request, jsonify, make_response
-
 from constants import MOVIE_PORT, HOST
 
 app = Flask(__name__)
