@@ -3,7 +3,7 @@ import requests
 from flask import Flask, request, jsonify
 from werkzeug.exceptions import BadRequest, Conflict
 
-from constants import BOOKING_PORT, HOST, SHOWTIME_PORT
+from constants import BOOKING_PORT, HOST, SHOWTIME_PORT, DOCKER_SHOWTIME_HOST
 
 app = Flask(__name__)
 
@@ -50,7 +50,7 @@ def add_booking_for_user(userid):
 
     # Request the Showtime service to validate the movie for the specified date.
     try:
-        showtime_response = requests.get(f'http://{HOST}:{SHOWTIME_PORT}/showmovies/{booking_date}')
+        showtime_response = requests.get(f'http://{DOCKER_SHOWTIME_HOST}:{SHOWTIME_PORT}/showmovies/{booking_date}')
         if showtime_response.status_code != 200:
             raise BadRequest(f"No valid showtime found for date {booking_date}")
 

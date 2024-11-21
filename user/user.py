@@ -1,7 +1,7 @@
 import json
 import requests
 from flask import Flask, request, jsonify, make_response
-from constants import BOOKING_PORT, HOST, USER_PORT, MOVIE_PORT
+from constants import BOOKING_PORT, HOST, USER_PORT, MOVIE_PORT, DOCKER_BOOKING_HOST, DOCKER_MOVIE_HOST
 
 app = Flask(__name__)
 
@@ -88,7 +88,7 @@ def get_user_bookings(userid):
         return jsonify({"error": "User not found"}), 404
 
     user_id = selected_user['id']
-    booking_service_url = f'http://{HOST}:{BOOKING_PORT}/bookings/{user_id}'
+    booking_service_url = f'http://{DOCKER_BOOKING_HOST}:{BOOKING_PORT}/bookings/{user_id}'
 
     try:
         response = requests.get(booking_service_url)
@@ -115,7 +115,7 @@ def get_user_movie_details(userid):
 
     # Fetch bookings from Booking service.
     try:
-        booking_response = requests.get(f'http://{HOST}:{BOOKING_PORT}/bookings/{user_id}')
+        booking_response = requests.get(f'http://{DOCKER_BOOKING_HOST}:{BOOKING_PORT}/bookings/{user_id}')
         if booking_response.status_code != 200:
             return jsonify({"error": "No bookings found for the user"}), 404
 
@@ -126,7 +126,7 @@ def get_user_movie_details(userid):
         for booking in bookings:
             for date_entry in booking['dates']:
                 for movie_id in date_entry['movies']:
-                    movie_response = requests.get(f'http://{HOST}:{MOVIE_PORT}/movies/{movie_id}')
+                    movie_response = requests.get(f'http://{DOCKER_MOVIE_HOST}:{MOVIE_PORT}/movies/{movie_id}')
                     if movie_response.status_code == 200:
                         movie_details.append(movie_response.json())
 
