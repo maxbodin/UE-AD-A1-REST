@@ -102,3 +102,26 @@
 ├── constants.py # Contient les constantes utilisées par tous les services
 └── README.md # Documentation du projet
 ```
+
+## Auteurs
+
+<table>
+    <tr>
+        <td align="center">
+            <a href="https://github.com/nathanmariedev">
+                <img src="https://avatars.githubusercontent.com/u/130608859?v=4" width="100px;" alt="Image de profil" style="border-radius: 100%"/>
+                <br />
+                <sub><b>Nathan Marie</b></sub>
+            </a>
+            <br />
+        </td>
+        <td align="center">
+            <a href="https://github.com/maxbodin">
+                <img src="https://avatars.githubusercontent.com/u/159888863?v=4" width="100px;" alt="Image de profil" style="border-radius: 100%"/>
+                <br />
+                <sub><b>MaxBodin</b></sub>
+            </a>
+            <br />
+        </td>
+    </tr>
+</table>
